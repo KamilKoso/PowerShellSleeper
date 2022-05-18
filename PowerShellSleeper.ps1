@@ -1,14 +1,9 @@
 Add-Type -Assembly System.Windows.Forms
-$host.privatedata.ProgressBackgroundColor = "black";
 
-$TimerStart = [datetime]::UtcNow;
-$EndTime = [datetime]::UtcNow
 Write-Host "How much time before putting the computer to sleep?"
-$EndTime = $EndTime.AddDays([int](Read-Host "Days"))
-$EndTime = $EndTime.AddHours([int](Read-Host "Hours"))
-$EndTime = $EndTime.AddMinutes([int](Read-Host "Minutes"))
-$EndTime = $EndTime.AddSeconds([int](Read-Host "Seconds"))
-
+$TimeBeforeSleep = New-TimeSpan -Days (Read-Host "Days") -Hours (Read-Host "Hours") -Minutes (Read-Host "Minutes") -Seconds (Read-Host "Seconds");
+$TimerStart = [datetime]::UtcNow;
+$EndTime = $TimerStart.Add($TimeBeforeSleep);
 while (($TimeRemaining = ($EndTime - [datetime]::UtcNow)) -gt 0) {
     $TimeRemainingString = "";
     if ($TimeRemaining.Days -gt 0) {
